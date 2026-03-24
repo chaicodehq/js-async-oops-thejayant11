@@ -113,7 +113,7 @@ export function createSamosaCart(ownerName, location) {
 
       return this.sales.reduce((sum, sale) => sum + sale.total, 0);
     },
-
+ 
     // 3. getPopularItem
     getPopularItem() {
       if (this.sales.length === 0) return null;
