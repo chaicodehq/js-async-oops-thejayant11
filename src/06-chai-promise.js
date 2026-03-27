@@ -113,39 +113,27 @@ export function checkIngredients(ingredient) {
 }
 
 export function prepareChaiWithTimeout(type, timeoutMs) {
-  // Your code here
-  const chaiPromise = orderChai(type, 1);
+  let timer;
 
   const timeoutPromise = new Promise((_, reject) => {
-    const timer = setTimeout(() => {
+    timer = setTimeout(() => {
       reject(new Error("Bahut der ho gayi, chai nahi bani!"));
     }, timeoutMs);
-
-    // Cleanup (important)
-    chaiPromise.finally(() => clearTimeout(timer));
   });
+
+  const chaiPromise = orderChai(type, 1)
+    .finally(() => clearTimeout(timer)); // cleanup
 
   return Promise.race([chaiPromise, timeoutPromise]);
 }
 
 export function processChaiQueue(orders) {
+// Your code here
   if (!Array.isArray(orders) || orders.length === 0) {
     return Promise.resolve([]);
   }
 
   const promises = orders.map((order) => {
-    // Your code here
-    if (
-      !order ||
-      typeof order.type !== "string" ||
-      typeof order.quantity !== "number"
-    ) {
-      return Promise.resolve({
-        status: "rejected",
-        reason: "Invalid order format"
-      });
-    }
-
     return orderChai(order.type, order.quantity)
       .then((result) => ({
         status: "fulfilled",
